@@ -2,11 +2,9 @@ package main;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -16,22 +14,20 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		
-		
 		System.out.println("-----------------------------");
 		System.out.println("         UPGRADE HUB         ");
 		System.out.println("-----------------------------");
-		
+
 		System.out.println("1. Iniciar Sesión");
 		System.out.println("2. Nuevo Registro");
 		System.out.println("");
-		
+
 		System.out.print("Introduce 1 o 2: ");
 		int choice = Integer.parseInt(sc.nextLine());
-		
+
 		String user;
 		String pass;
-		
+
 		switch (choice) {
 		case 1:
 			System.out.print("- User: ");
@@ -48,11 +44,6 @@ public class Main {
 			escribir(user, pass);
 			break;
 		}
-		
-		
-	
-
-		
 
 		// escribir(user, pass);
 
@@ -74,25 +65,27 @@ public class Main {
 	}
 
 	private static void leer(String user, String pass) {
-		try (FileReader fr = new FileReader(FICHERO_USERS_PASSWORDS); 
-				BufferedReader br = new BufferedReader(fr)) {
-			
+		try (FileReader fr = new FileReader(FICHERO_USERS_PASSWORDS); BufferedReader br = new BufferedReader(fr)) {
+
 			String linea = br.readLine();
-			int i = 0;
-			List<String> listaUsuarios = new ArrayList<String>();
-			List<String> listaPasswords = new ArrayList<String>();
-			
-			while(linea != null) {
-				listaUsuarios.add(linea.split("/"));
-				//System.out.println(linea.split("/")[0]);
-				if (linea.split("/")[0]);
+			HashMap<String, String> listaUsuarios = new HashMap<String, String>();
+
+			while (linea != null) {
+				listaUsuarios.put(linea.split("/")[0], linea.split("/")[1]);
 				linea = br.readLine();
-				
 			}
+
+			if (listaUsuarios.containsKey(user)) {
+				if (listaUsuarios.get(user).equals(pass)) {
+					System.out.println("Bienvenido " + user);
+				} else {
+					System.out.println("Usuario y/o contraseña incorrectos");
+				}
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 
 }
