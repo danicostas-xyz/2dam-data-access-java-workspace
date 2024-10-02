@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import entidad.Usuario;
+
 public class Main {
 
 	public static final String FICHERO_USERS_PASSWORDS = "users-and-passwords.txt";
@@ -14,57 +16,75 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		System.out.println("-----------------------------");
-		System.out.println("         UPGRADE HUB         ");
-		System.out.println("-----------------------------");
-
-		System.out.println("1. Iniciar Sesión");
-		System.out.println("2. Nuevo Registro");
-		System.out.println("");
-
-		System.out.print("Introduce 1 o 2: ");
-		int choice = Integer.parseInt(sc.nextLine());
-
-		String user;
-		String pass;
-
-		switch (choice) {
+		switch (printMenu()) {
 		case 1:
-			System.out.print("- User: ");
-			user = sc.nextLine().trim();
-			System.out.print("- Pass: ");
-			pass = sc.nextLine().trim();
-			leer(user, pass);
+			validarLogIn();
 			break;
 		case 2:
-			System.out.print("- User: ");
-			user = sc.nextLine().trim();
-			System.out.print("- Pass: ");
-			pass = sc.nextLine().trim();
-			escribir(user, pass);
+			registrarUsuario();
 			break;
 		}
-
-		// escribir(user, pass);
 
 		sc.close();
 	}
 
-	private static void escribir(String user, String pass) {
-		// Hay que poner true, si no existe se crea y si existe se abre en modo append
-		// para no sobreescribirlo
-		try (FileWriter fw = new FileWriter(FICHERO_USERS_PASSWORDS, true);
-				BufferedWriter bw = new BufferedWriter(fw)) {
+	private static void registrarUsuario() {
+		Usuario usuario = new Usuario();
+		System.out.print("- User: ");
+		usuario.setUser(sc.nextLine().trim());
+		System.out.print("- Pass: ");
+		usuario.setPass(sc.nextLine().trim());
+		usuario.altaUsuario();
+	}
 
-			bw.write(user + "/" + pass);
-			bw.newLine();
+	private static void validarLogIn() {
+		System.out.print("- User: ");
+		String user = sc.nextLine().trim();
+		System.out.print("- Pass: ");
+		String pass = sc.nextLine().trim();
 
-		} catch (Exception e) {
-			e.printStackTrace();
+		HashMap<String, String> listaUsuarios = crearListaUsuarios(user, pass);
+
+		if (listaUsuarios != null) {
+			if (listaUsuarios.containsKey(user)) {
+				if (listaUsuarios.get(user).equals(pass)) {
+					System.out.println("Bienvenido " + user);
+				} else {
+					System.out.println("Usuario y/o contraseña incorrectos");
+				}
+			} else {
+				System.out.println("Usuario y/o contraseña incorrectos");
+			}
+		} else {
+			System.out.println("Se ha producido un error en la carga de usuarios.");
+			System.out.println("Por favor, vuelva a intentarlo más tarde");
 		}
 	}
 
-	private static void leer(String user, String pass) {
+	private static int printMenu() {
+		System.out.println("-----------------------------");
+		System.out.println("         UPGRADE HUB         ");
+		System.out.println("-----------------------------");
+
+		System.out.println("MENÚ DE INICIO");
+		System.out.println("");
+		System.out.println("1. Iniciar Sesión");
+		System.out.println("2. Nuevo Registro");
+		System.out.println("");
+
+		int choice = 0;
+		do {
+			System.out.print("Selecciona 1 o 2: ");
+			choice = Integer.parseInt(sc.nextLine());
+			if (choice < 1 || choice > 2) {
+				System.out.println("Opción incorrecta");
+			}
+		} while (choice < 1 || choice > 2);
+
+		return choice;
+	}
+
+	private static HashMap<String, String> crearListaUsuarios(String user, String pass) {
 		try (FileReader fr = new FileReader(FICHERO_USERS_PASSWORDS); BufferedReader br = new BufferedReader(fr)) {
 
 			String linea = br.readLine();
@@ -74,18 +94,13 @@ public class Main {
 				listaUsuarios.put(linea.split("/")[0], linea.split("/")[1]);
 				linea = br.readLine();
 			}
-
-			if (listaUsuarios.containsKey(user)) {
-				if (listaUsuarios.get(user).equals(pass)) {
-					System.out.println("Bienvenido " + user);
-				} else {
-					System.out.println("Usuario y/o contraseña incorrectos");
-				}
-			}
+			return listaUsuarios;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
+
 	}
 
 }
