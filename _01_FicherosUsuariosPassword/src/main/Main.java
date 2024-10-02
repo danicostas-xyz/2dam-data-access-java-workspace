@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -76,7 +78,12 @@ public class Main {
 				BufferedReader br = new BufferedReader(fr)) {
 			
 			String linea = br.readLine();
+			int i = 0;
+			List<String> listaUsuarios = new ArrayList<String>();
+			List<String> listaPasswords = new ArrayList<String>();
+			
 			while(linea != null) {
+				listaUsuarios.add(linea.split("/"));
 				//System.out.println(linea.split("/")[0]);
 				if (linea.split("/")[0]);
 				linea = br.readLine();
