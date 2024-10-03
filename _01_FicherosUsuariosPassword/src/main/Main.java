@@ -9,19 +9,27 @@ import entidad.Usuario;
 public class Main {
 
 	public static final String FICHERO_USERS_PASSWORDS = "users-and-passwords.txt";
-	static Scanner sc = new Scanner(System.in);
+	public static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
 		App app = new App();
-		HashMap<String, String> listaUsuarios = app.getListaUsuarios();
 
 		switch (printMenu()) {
 		case 1:
-			validarLogIn(listaUsuarios);
+			int intentos = 3;
+			while (intentos > 0) {
+				if(app.validarLogIn()) {
+					app.iniciarSesion();
+					return;
+				} else {
+					intentos--;
+				}
+			}
+			System.out.println("App Bloqueada por pasarte de intentos");
 			break;
 		case 2:
-			registrarUsuario();
+			app.registrarUsuario();
 			break;
 		}
 
@@ -49,37 +57,6 @@ public class Main {
 		} while (choice < 1 || choice > 2);
 
 		return choice;
-	}
-
-	private static void validarLogIn(HashMap<String, String> listaUsuarios) {
-		System.out.print("- User: ");
-		String user = sc.nextLine().trim();
-		System.out.print("- Pass: ");
-		String pass = sc.nextLine().trim();
-
-		if (listaUsuarios != null) {
-			if (listaUsuarios.containsKey(user)) {
-				if (listaUsuarios.get(user).equals(pass)) {
-					System.out.println("Bienvenido " + user);
-				} else {
-					System.out.println("Usuario y/o contraseña incorrectos");
-				}
-			} else {
-				System.out.println("Usuario y/o contraseña incorrectos");
-			}
-		} else {
-			System.out.println("Se ha producido un error en la carga de usuarios.");
-			System.out.println("Por favor, vuelva a intentarlo más tarde");
-		}
-	}
-
-	private static void registrarUsuario() {
-		Usuario usuario = new Usuario();
-		System.out.print("- User: ");
-		usuario.setUser(sc.nextLine().trim());
-		System.out.print("- Pass: ");
-		usuario.setPass(sc.nextLine().trim());
-		usuario.altaUsuario();
 	}
 
 }

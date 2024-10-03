@@ -30,19 +30,4 @@ public class Usuario {
 		this.pass = pass;
 	}
 
-	public void altaUsuario() {
-		// Hay que poner true, si no existe se crea y si existe se abre en modo append
-		// para no sobreescribirlo
-		try (FileWriter fw = new FileWriter(Main.FICHERO_USERS_PASSWORDS, true);
-				BufferedWriter bw = new BufferedWriter(fw)) {
-
-			bw.write(user + "/" + pass);
-			bw.newLine();
-			
-			System.out.println("Usuario creado con éxito");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }
