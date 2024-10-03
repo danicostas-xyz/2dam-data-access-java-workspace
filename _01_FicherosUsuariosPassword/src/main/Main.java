@@ -19,10 +19,10 @@ public class Main {
 		case 1:
 			int intentos = 3;
 			while (intentos > 0) {
-				if(app.validarLogIn()) {
+				if (app.validarLogIn()) {
 					app.iniciarSesion();
 					return;
-				} else if (app.getListaUsuarios().isEmpty()){
+				} else if (app.getListaUsuarios().isEmpty()) {
 					app.registrarUsuario();
 					return;
 				} else if (!app.getListaUsuarios().isEmpty()) {

@@ -9,6 +9,7 @@ public class Usuario {
 
 	private String user;
 	private String pass;
+	private boolean bloqueado;
 
 	public Usuario() {
 		super();
@@ -29,5 +30,15 @@ public class Usuario {
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
+
+	public boolean isBloqueado() {
+		return bloqueado;
+	}
+
+	public void setBloqueado(boolean bloqueado) {
+		this.bloqueado = bloqueado;
+	}
+	
+	
 
 }

@@ -60,21 +60,18 @@ public class App {
 				System.out.println("Por favor, cree el primer usuario");
 				return false;
 			}
-			
+
 		} else {
 			System.out.println("Se ha producido un error en la carga de usuarios.");
 			System.out.println("Por favor, vuelva a intentarlo más tarde");
-			
+
 		}
 		return false;
 	}
 
 	public void registrarUsuario() {
-		usuario = new Usuario();
-		System.out.print("- User: ");
-		usuario.setUser(Main.sc.nextLine().trim());
-		System.out.print("- Pass: ");
-		usuario.setPass(hashPass(Main.sc.nextLine().trim()));
+		
+		validarSiExisteUsuario();
 
 		try (FileWriter fw = new FileWriter(Main.FICHERO_USERS_PASSWORDS, true);
 				BufferedWriter bw = new BufferedWriter(fw)) {
@@ -88,7 +85,7 @@ public class App {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String hashPass(String pass) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -96,9 +93,10 @@ public class App {
 			byte[] digest = md.digest();
 			StringBuffer hexString = new StringBuffer();
 			for (int i = 0; i < digest.length; i++) {
-			    String hex = Integer.toHexString(0xff & digest[i]);
-			    if(hex.length() == 1) hexString.append('0');
-			    hexString.append(hex);
+				String hex = Integer.toHexString(0xff & digest[i]);
+				if (hex.length() == 1)
+					hexString.append('0');
+				hexString.append(hex);
 			}
 			return hexString.toString();
 		} catch (NoSuchAlgorithmException e) {
@@ -114,10 +112,29 @@ public class App {
 	public Usuario getUsuario() {
 		return usuario;
 	}
+	
+	private void validarSiExisteUsuario(){
+		usuario = new Usuario();
+		System.out.print("- User: ");
+		usuario.setUser(Main.sc.nextLine().trim());
+		boolean usuarioExiste = listaUsuarios.containsKey(usuario.getUser());
+		
+		while (usuarioExiste) {
+			System.out.println("** EL USUARIO YA EXISTE **");
+			System.out.println("** PRUEBA UNO DIFERENTE **");
+			System.out.print("- User: ");
+			usuario.setUser(Main.sc.nextLine().trim());
+			usuarioExiste = listaUsuarios.containsKey(usuario.getUser());
+		}
+
+		System.out.print("- Pass: ");
+		usuario.setPass(hashPass(Main.sc.nextLine().trim()));
+
+	}
 
 	public void iniciarSesion() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
