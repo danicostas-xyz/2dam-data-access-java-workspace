@@ -38,6 +38,8 @@ public class Usuario {
 
 			bw.write(user + "/" + pass);
 			bw.newLine();
+			
+			System.out.println("Usuario creado con éxito");
 
 		} catch (Exception e) {
 			e.printStackTrace();

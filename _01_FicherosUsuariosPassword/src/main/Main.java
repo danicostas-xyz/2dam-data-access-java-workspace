@@ -1,12 +1,9 @@
 package main;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import entidad.App;
 import entidad.Usuario;
 
 public class Main {
@@ -16,9 +13,12 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		App app = new App();
+		HashMap<String, String> listaUsuarios = app.getListaUsuarios();
+
 		switch (printMenu()) {
 		case 1:
-			validarLogIn();
+			validarLogIn(listaUsuarios);
 			break;
 		case 2:
 			registrarUsuario();
@@ -26,39 +26,6 @@ public class Main {
 		}
 
 		sc.close();
-	}
-
-	private static void registrarUsuario() {
-		Usuario usuario = new Usuario();
-		System.out.print("- User: ");
-		usuario.setUser(sc.nextLine().trim());
-		System.out.print("- Pass: ");
-		usuario.setPass(sc.nextLine().trim());
-		usuario.altaUsuario();
-	}
-
-	private static void validarLogIn() {
-		System.out.print("- User: ");
-		String user = sc.nextLine().trim();
-		System.out.print("- Pass: ");
-		String pass = sc.nextLine().trim();
-
-		HashMap<String, String> listaUsuarios = crearListaUsuarios(user, pass);
-
-		if (listaUsuarios != null) {
-			if (listaUsuarios.containsKey(user)) {
-				if (listaUsuarios.get(user).equals(pass)) {
-					System.out.println("Bienvenido " + user);
-				} else {
-					System.out.println("Usuario y/o contraseña incorrectos");
-				}
-			} else {
-				System.out.println("Usuario y/o contraseña incorrectos");
-			}
-		} else {
-			System.out.println("Se ha producido un error en la carga de usuarios.");
-			System.out.println("Por favor, vuelva a intentarlo más tarde");
-		}
 	}
 
 	private static int printMenu() {
@@ -84,23 +51,35 @@ public class Main {
 		return choice;
 	}
 
-	private static HashMap<String, String> crearListaUsuarios(String user, String pass) {
-		try (FileReader fr = new FileReader(FICHERO_USERS_PASSWORDS); BufferedReader br = new BufferedReader(fr)) {
+	private static void validarLogIn(HashMap<String, String> listaUsuarios) {
+		System.out.print("- User: ");
+		String user = sc.nextLine().trim();
+		System.out.print("- Pass: ");
+		String pass = sc.nextLine().trim();
 
-			String linea = br.readLine();
-			HashMap<String, String> listaUsuarios = new HashMap<String, String>();
-
-			while (linea != null) {
-				listaUsuarios.put(linea.split("/")[0], linea.split("/")[1]);
-				linea = br.readLine();
+		if (listaUsuarios != null) {
+			if (listaUsuarios.containsKey(user)) {
+				if (listaUsuarios.get(user).equals(pass)) {
+					System.out.println("Bienvenido " + user);
+				} else {
+					System.out.println("Usuario y/o contraseña incorrectos");
+				}
+			} else {
+				System.out.println("Usuario y/o contraseña incorrectos");
 			}
-			return listaUsuarios;
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
+			System.out.println("Se ha producido un error en la carga de usuarios.");
+			System.out.println("Por favor, vuelva a intentarlo más tarde");
 		}
-		return null;
+	}
 
+	private static void registrarUsuario() {
+		Usuario usuario = new Usuario();
+		System.out.print("- User: ");
+		usuario.setUser(sc.nextLine().trim());
+		System.out.print("- Pass: ");
+		usuario.setPass(sc.nextLine().trim());
+		usuario.altaUsuario();
 	}
 
 }
