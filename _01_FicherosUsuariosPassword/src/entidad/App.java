@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 import main.Main;
@@ -36,7 +39,7 @@ public class App {
 		System.out.print("- User: ");
 		String user = Main.sc.nextLine().trim();
 		System.out.print("- Pass: ");
-		String pass = Main.sc.nextLine().trim();
+		String pass = hashPass(Main.sc.nextLine().trim());
 
 		if (listaUsuarios != null) {
 			if (listaUsuarios.containsKey(user)) {
@@ -64,7 +67,7 @@ public class App {
 		System.out.print("- User: ");
 		usuario.setUser(Main.sc.nextLine().trim());
 		System.out.print("- Pass: ");
-		usuario.setPass(Main.sc.nextLine().trim());
+		usuario.setPass(hashPass(Main.sc.nextLine().trim()));
 
 		try (FileWriter fw = new FileWriter(Main.FICHERO_USERS_PASSWORDS, true);
 				BufferedWriter bw = new BufferedWriter(fw)) {
@@ -76,6 +79,24 @@ public class App {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public String hashPass(String pass) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			md.update(pass.getBytes(StandardCharsets.UTF_8));
+			byte[] digest = md.digest();
+			StringBuffer hexString = new StringBuffer();
+			for (int i = 0; i < digest.length; i++) {
+			    String hex = Integer.toHexString(0xff & digest[i]);
+			    if(hex.length() == 1) hexString.append('0');
+			    hexString.append(hex);
+			}
+			return hexString.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 
