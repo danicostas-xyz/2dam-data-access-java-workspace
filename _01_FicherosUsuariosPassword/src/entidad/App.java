@@ -42,18 +42,25 @@ public class App {
 		String pass = hashPass(Main.sc.nextLine().trim());
 
 		if (listaUsuarios != null) {
-			if (listaUsuarios.containsKey(user)) {
-				if (listaUsuarios.get(user).equals(pass)) {
-					System.out.println("Bienvenido " + user);
-					return true;
+			if (!listaUsuarios.isEmpty()) {
+				if (listaUsuarios.containsKey(user)) {
+					if (listaUsuarios.get(user).equals(pass)) {
+						System.out.println("Bienvenido " + user);
+						return true;
+					} else {
+						System.out.println("Usuario y/o contraseña incorrectos");
+						return false;
+					}
 				} else {
 					System.out.println("Usuario y/o contraseña incorrectos");
 					return false;
 				}
 			} else {
-				System.out.println("Usuario y/o contraseña incorrectos");
+				System.out.println("No hay ningún usuario en la plataforma");
+				System.out.println("Por favor, cree el primer usuario");
 				return false;
 			}
+			
 		} else {
 			System.out.println("Se ha producido un error en la carga de usuarios.");
 			System.out.println("Por favor, vuelva a intentarlo más tarde");

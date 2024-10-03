@@ -15,14 +15,17 @@ public class Main {
 
 		App app = new App();
 
-		switch (printMenu()) {
+		switch (menu()) {
 		case 1:
 			int intentos = 3;
 			while (intentos > 0) {
 				if(app.validarLogIn()) {
 					app.iniciarSesion();
 					return;
-				} else {
+				} else if (app.getListaUsuarios().isEmpty()){
+					app.registrarUsuario();
+					return;
+				} else if (!app.getListaUsuarios().isEmpty()) {
 					intentos--;
 				}
 			}
@@ -31,12 +34,14 @@ public class Main {
 		case 2:
 			app.registrarUsuario();
 			break;
+		case 3:
+			System.out.println("Programa finalizado");
 		}
 
 		sc.close();
 	}
 
-	private static int printMenu() {
+	private static int menu() {
 		System.out.println("-----------------------------");
 		System.out.println("         UPGRADE HUB         ");
 		System.out.println("-----------------------------");
@@ -45,16 +50,17 @@ public class Main {
 		System.out.println("");
 		System.out.println("1. Iniciar Sesión");
 		System.out.println("2. Nuevo Registro");
+		System.out.println("3. Salir del Programa");
 		System.out.println("");
 
 		int choice = 0;
 		do {
-			System.out.print("Selecciona 1 o 2: ");
+			System.out.print("Selecciona 1, 2 o 3: ");
 			choice = Integer.parseInt(sc.nextLine());
-			if (choice < 1 || choice > 2) {
+			if (choice < 1 || choice > 3) {
 				System.out.println("Opción incorrecta");
 			}
-		} while (choice < 1 || choice > 2);
+		} while (choice < 1 || choice > 3);
 
 		return choice;
 	}
