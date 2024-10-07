@@ -37,7 +37,7 @@ public class App {
 
 	public boolean validarLogIn() {
 		System.out.print("- User: ");
-		String user = Main.sc.nextLine().trim();
+		String user = Main.sc.nextLine().trim().toLowerCase();
 		System.out.print("- Pass: ");
 		String pass = hashPass(Main.sc.nextLine().trim());
 
@@ -116,7 +116,7 @@ public class App {
 	private void validarSiExisteUsuario(){
 		usuario = new Usuario();
 		System.out.print("- User: ");
-		usuario.setUser(Main.sc.nextLine().trim());
+		usuario.setUser(Main.sc.nextLine().trim().toLowerCase());
 		boolean usuarioExiste = listaUsuarios.containsKey(usuario.getUser());
 		
 		while (usuarioExiste) {
