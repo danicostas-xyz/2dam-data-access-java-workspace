@@ -2,6 +2,8 @@ package modelo.interfaz;
 
 import java.util.Scanner;
 
+import modelo.entidad.Coche;
+import modelo.entidad.TipoMotor;
 import modelo.negocio.Gestor;
 
 public class Interfaz {
@@ -26,7 +28,38 @@ public class Interfaz {
 	}
 
 	private static void introducirCoche() {
-		Gestor.getInstance();
+		
+		System.out.println("- Marca: ");
+		String marca = scStr.nextLine();
+		System.out.println("- Modelo: ");
+		String modelo = scStr.nextLine();
+		System.out.println("- Kilómetros: ");
+		String kilometros = scStr.nextLine();
+		System.out.println("- Elija la opción del motor: ");
+		System.out.println("1. Gasolina");
+		System.out.println("2. Diésel");
+		System.out.println("3. Hidrógeno");
+		int motor = scInt.nextInt();
+		TipoMotor tipoMotor = null;
+		
+		switch (motor) {
+		case 1:
+			tipoMotor = TipoMotor.GASOLINA;
+			break;
+		case 2:
+			tipoMotor = TipoMotor.DIESEL;
+			break;
+		case 3:
+			tipoMotor = TipoMotor.HIDROGENO;
+			break;
+		default:
+			break;
+		}
+		
+		
+		
+		Coche c = new Coche();
+		Gestor.getInstance().validarDatosCoche(c);
 
 	}
 

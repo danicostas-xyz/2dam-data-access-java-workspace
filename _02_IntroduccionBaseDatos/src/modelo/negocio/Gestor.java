@@ -1,6 +1,7 @@
 package modelo.negocio;
 
 import modelo.entidad.Coche;
+import modelo.persistencia.Dao;
 
 public class Gestor {
 	public static Gestor gestor;
@@ -49,6 +50,19 @@ public class Gestor {
 		}
 
 		return 0;
+	}
+
+	/**
+	 * Método que accede al Dao para guardar un Coche pasado por parámetro en la Base de Datos
+	 * @param c el Coche a persistir en la Base de Datos
+	 * @return 0 en caso de que se haya persistido el coche correctamente, 1 en
+	 *         caso de que no se haya persistido ningún coche, 2 en caso de que
+	 *         haya ocurrido algún error en la conexión a la base de datos
+	 */
+	public int guardarCoche(Coche c) {
+
+		int resultado = Dao.getInstance().insertIntoBBDD(c);
+		return resultado;
 	}
 
 }

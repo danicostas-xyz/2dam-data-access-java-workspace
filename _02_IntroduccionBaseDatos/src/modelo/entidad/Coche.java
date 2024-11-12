@@ -11,9 +11,8 @@ public class Coche {
 		super();
 	}
 	
-	public Coche(String id, String marca, String modelo, TipoMotor motor, int kilometros) {
+	public Coche(String marca, String modelo, TipoMotor motor, int kilometros) {
 		super();
-		this.id = id;
 		this.marca = marca;
 		this.modelo = modelo;
 		this.motor = motor;
