@@ -10,7 +10,7 @@ import modelo.entidad.Coche;
 public class Dao {
 
 	public static Dao dao;
-	private String url = "jdbc:mysql://127.0.0.1:3306/bbdd";
+	private String url = "jdbc:mysql://127.0.0.1:3306/02_IntroduccionBBDD";
 	private String user = "root";
 	private String pass = "";
 
