@@ -34,7 +34,7 @@ public class Interfaz {
 		System.out.println("- Modelo: ");
 		String modelo = scStr.nextLine();
 		System.out.println("- Kilómetros: ");
-		String kilometros = scStr.nextLine();
+		int kilometros = scInt.nextInt();
 		System.out.println("- Elija la opción del motor: ");
 		System.out.println("1. Gasolina");
 		System.out.println("2. Diésel");
@@ -55,11 +55,16 @@ public class Interfaz {
 		default:
 			break;
 		}
+
+		Coche c = new Coche(marca, modelo, tipoMotor, kilometros);
+		int respuesta = Gestor.getInstance().validarDatosCoche(c);
 		
-		
-		
-		Coche c = new Coche();
-		Gestor.getInstance().validarDatosCoche(c);
+		if (respuesta == 0) {
+			int respuestaGuardar = Gestor.getInstance().guardarCoche(c);
+			if (respuestaGuardar == 00) {
+				System.out.println("Coche guardado correctamente");
+			}
+		}
 
 	}
 
