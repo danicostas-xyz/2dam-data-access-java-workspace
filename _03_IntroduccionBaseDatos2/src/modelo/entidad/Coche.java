@@ -11,6 +11,12 @@ public class Coche {
 		super();
 	}
 	
+	@Override
+	public String toString() {
+		return "Coche [id=" + id + ", marca=" + marca + ", modelo=" + modelo + ", motor=" + motor + ", kilometros="
+				+ kilometros + "]";
+	}
+
 	public Coche(String marca, String modelo, TipoMotor motor, int kilometros) {
 		super();
 		this.marca = marca;

@@ -84,7 +84,7 @@ public class Dao {
 
 		try (Connection conn = DriverManager.getConnection(url, user, pass);) {
 
-			String query = "DELETE * FROM coches WHERE id =?";
+			String query = "DELETE FROM coches WHERE id =?";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setInt(1, id);
 
