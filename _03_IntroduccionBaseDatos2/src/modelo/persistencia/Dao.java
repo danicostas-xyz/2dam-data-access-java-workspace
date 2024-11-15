@@ -14,6 +14,7 @@ import modelo.entidad.TipoMotor;
 public class Dao {
 
 	/*
+	 * 
 	 * Tabla SQL usada:
 	 * 
 	 * CREATE TABLE coches ( id INT AUTO_INCREMENT PRIMARY KEY, marca VARCHAR(50)
@@ -152,7 +153,10 @@ public class Dao {
 			String query = "SELECT * FROM coches WHERE id =?";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setInt(1, id);
+
 			listaCoches = selectQuery(ps);
+
+			selectQuery(ps);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -226,7 +230,9 @@ public class Dao {
 	 *         devolviese ningún coche, se devolverá una lista vacía
 	 * @throws SQLException si ocurre un error en la consulta
 	 */
+
 	private List<Coche> selectQuery(PreparedStatement ps) throws SQLException {
+
 		ResultSet rs = ps.executeQuery();
 		Coche c = null;
 		List<Coche> listaCoches = new ArrayList<Coche>();
@@ -260,6 +266,7 @@ public class Dao {
 		}
 
 		return listaCoches;
+
 	}
 
 }
