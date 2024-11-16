@@ -1,5 +1,7 @@
 package modelo.entidad;
 
+import java.util.Objects;
+
 public class Coche {
 	private int id;
 	private String marca;
@@ -10,11 +12,29 @@ public class Coche {
 	public Coche() {
 		super();
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Coche [id=" + id + ", marca=" + marca + ", modelo=" + modelo + ", motor=" + motor + ", kilometros="
-				+ kilometros + "]";
+		return "Información del coche " + id + ":\n" + "-----------------------\n" + "ID: " + id + "\n" + "Marca: "
+				+ marca + "\n" + "Modelo: " + modelo + "\n" + "Motor: " + motor + "\n" + "Kilómetros: " + kilometros
+				+ " km\n";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Coche other = (Coche) obj;
+		return id == other.id;
 	}
 
 	public Coche(String marca, String modelo, TipoMotor motor, int kilometros) {
