@@ -52,9 +52,9 @@ public class Dao {
 
 			String query = "INSERT INTO coches (MARCA, MODELO, MOTOR, KILOMETROS) VALUES (?, ?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setString(1, c.getMarca());
-			ps.setString(2, c.getModelo());
-			ps.setString(3, String.valueOf(c.getMotor()));
+			ps.setString(1, c.getMarca().toUpperCase());
+			ps.setString(2, c.getModelo().toUpperCase());
+			ps.setString(3, String.valueOf(c.getMotor()).toUpperCase());
 			ps.setInt(4, c.getKilometros());
 
 			int rows = ps.executeUpdate();
@@ -117,9 +117,9 @@ public class Dao {
 
 			String query = "UPDATE coches SET marca = ?, modelo = ?, motor = ?, kilometros = ? WHERE id=?";
 			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setString(1, c.getMarca());
-			ps.setString(2, c.getModelo());
-			ps.setString(3, String.valueOf(c.getMotor()));
+			ps.setString(1, c.getMarca().toUpperCase());
+			ps.setString(2, c.getModelo().toUpperCase());
+			ps.setString(3, String.valueOf(c.getMotor()).toUpperCase());
 			ps.setInt(4, c.getKilometros());
 			ps.setInt(5, c.getId());
 

@@ -1,6 +1,7 @@
 package modelo.interfaz;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import modelo.entidad.Coche;
@@ -25,14 +26,19 @@ public class Interfaz {
 	}
 
 	public void runApp() {
-	    System.out.println("\n===========================");
-	    System.out.println("        MENÚ PRINCIPAL     ");
-	    System.out.println("===========================\n");
+		
+		printSlowly("CARGANDO", 100);
+		print3Points(1000, 1000);
+		
+		System.out.println("\n================================");
+		System.out.println("          MENÚ PRINCIPAL     ");
+		System.out.println("================================");
 
-		int opcion = validarOpcion();
-		
+		printMenu();
+		int opcion = validarOpcion(0, 6);
+
 //		boolean opcionValida = false;
-		
+
 //		while(!opcionValida) {
 //			try {
 //				opcion = printMenu();
@@ -54,27 +60,33 @@ public class Interfaz {
 			switch (opcion) {
 			case 1:
 				altaCoche();
-				opcion = validarOpcion();
+				printMenu();
+				opcion = validarOpcion(0, 6);
 				break;
 			case 2:
 				bajaCochePorId();
-				opcion = validarOpcion();
+				printMenu();
+				opcion = validarOpcion(0, 6);
 				break;
 			case 3:
 				modificarCochePorID();
-				opcion = validarOpcion();
+				printMenu();
+				opcion = validarOpcion(0, 6);
 				break;
 			case 4:
 				buscarCochePorId();
-				opcion = validarOpcion();
+				printMenu();
+				opcion = validarOpcion(0, 6);
 				break;
 			case 5:
 				buscarCochePorMarca();
-				opcion = validarOpcion();
+				printMenu();
+				opcion = validarOpcion(0, 6);
 				break;
 			case 6:
 				listarTodosLosCoches();
-				opcion = validarOpcion();
+				printMenu();
+				opcion = validarOpcion(0, 6);
 				break;
 			default:
 				break;
@@ -83,109 +95,184 @@ public class Interfaz {
 		}
 
 		System.out.println("\n============================");
-	    System.out.println("       FIN DEL PROGRAMA      ");
-	    System.out.println("=============================");
+		System.out.println("       FIN DEL PROGRAMA      ");
+		System.out.println("=============================");
 
 	}
 
-	private int validarOpcion() {
-		int opcion = printMenu();
-		while (opcion < 0 || opcion > 6) {
-			System.out.print("Introduce un número entre 0 y 6: ");
-			opcion = scInt.nextInt();
-		}
-		return opcion;
-	}
-
-	private int printMenu() {
-		System.out.println("===========================");
-	    System.out.println("0. Salir de la aplicación");
-	    System.out.println("1. Dar de alta un coche");
-	    System.out.println("2. Dar de baja un coche por ID");
-	    System.out.println("3. Modificar un coche por ID");
-	    System.out.println("4. Buscar un coche por ID");
-	    System.out.println("5. Buscar coches por marca");
-	    System.out.println("6. Listar todos los coches");
-	    System.out.println("===========================");
-	    System.out.print("Seleccione una opción: ");
-	    
-	    int opcion = scInt.nextInt();
-	    return opcion;
+	private void printMenu() {
+		System.out.println("\n================================");
+		printlnSlowly("- 0. Salir de la aplicación", 5);
+		printlnSlowly("- 1. Dar de alta un coche", 5);
+		printlnSlowly("- 2. Dar de baja un coche por ID", 5);
+		printlnSlowly("- 3. Modificar un coche por ID", 5);
+		printlnSlowly("- 4. Buscar un coche por ID", 5);
+		printlnSlowly("- 5. Buscar coches por marca", 5);
+		printlnSlowly("- 6. Listar todos los coches", 5);
+		System.out.println("================================\n");
+		printSlowly("- Seleccione una opción: ", 5);
 	}
 
 	private void listarTodosLosCoches() {
-		// TODO Auto-generated method stub
+		System.out.println("\n===========================");
+		printlnSlowly("  Listar todos los coches  ", 5);
+		System.out.println("===========================\n");
+
+		List<Coche> listaCoches = gestor.selectAll();
+		if (listaCoches.size() == 0) {
+			System.out.println("No hay ningún coche en la Base de Datos");
+		} else {
+			System.out.print("Pulsa enter para listar todos los coches ");
+			scStr.nextLine();
+			System.out.println("");
+			for (Coche coche : listaCoches) {
+				System.out.println(coche);
+			}
+		}
 
 	}
 
 	private void buscarCochePorId() {
-		// TODO Auto-generated method stub
+		System.out.println("\n===========================");
+		printlnSlowly("    Buscar coche por ID    ", 5);
+		System.out.println("===========================\n");
+
+		System.out.println("Seleccione el ID a buscar: ");
+		int id = validarIntNoVacio("ID");
+		Coche c = gestor.selectById(id);
+		if (c == null) {
+			System.out.println("No se ha encontrado ningún coche con el ID especificado.");
+		} else {
+			System.out.println("Coche seleccionado: ");
+			System.out.println(c);
+		}
 
 	}
 
 	private void buscarCochePorMarca() {
-		// TODO Auto-generated method stub
+		System.out.println("\n===========================");
+		printlnSlowly("   Buscar coche por marca  ", 5);
+		System.out.println("===========================\n");
+
+		printSlowly("Seleccione la marca a buscar: ", 25);
+		String marca = validarStringNoVacio("Marca");
+		List<Coche> listaCoches = gestor.selectByMarca(marca);
+		if (listaCoches.size() == 0) {
+			printlnSlowly("No se ha encontrado ningún coche con la marca especificada.", 25);
+		} else {
+			printlnSlowly("Coches con la marca " + marca + ": ", 25);
+			for (Coche coche : listaCoches) {
+				System.out.println(coche);
+			}
+		}
 
 	}
 
 	private void modificarCochePorID() {
-		// TODO Auto-generated method stub
+		System.out.println("\n===========================");
+		printlnSlowly("   Modificar coche por ID  ", 5);
+		System.out.println("===========================\n");
+
+		printlnSlowly("Seleccione el ID a modificar: ", 25);
+		int id = validarIntNoVacio("ID");
+		Coche c = gestor.selectById(id);
+
+		if (c == null) {
+			printlnSlowly("No se ha encontrado ningún coche con el ID especificado.", 25);
+		} else {
+			printlnSlowly("Coche seleccionado: ", 25);
+			System.out.println(c.toString());
+			printlnSlowly("¿Seguro que quieres modificarlo?", 25);
+			printlnSlowly("\n1. Modificarlo", 10);
+			printlnSlowly("2. No modificarlo\n", 10);
+			printSlowly("- Seleccione una opción: ", 25);
+			int opcion = validarOpcion(1, 2);
+			if (opcion == 1) {
+
+				c = pedirDatosCoche();
+				c.setId(id);
+				int resultado = gestor.updateById(c);
+				
+				if (resultado == 1) {
+					printlnSlowly("Coche con id " + id + " modificado correctamente.", 25);
+				} else {
+					printlnSlowly("Ha ocurrido un error. Inténtelo de nuevo más tarde.", 25);
+				}
+			}
+		}
 
 	}
 
 	private void bajaCochePorId() {
-		// TODO Auto-generated method stub
+		System.out.println("\n===========================");
+		printlnSlowly("      Baja coche por ID    ", 5);
+		System.out.println("===========================\n");
+
+		printSlowly("Seleccione el ID a borrar: ", 25);
+		int id = validarIntNoVacio("ID");
+		Coche c = gestor.selectById(id);
+
+		if (c == null) {
+			printSlowly("No se ha encontrado ningún coche con el ID especificado.", 25);
+		} else {
+			printlnSlowly("Coche seleccionado: ", 25);
+			System.out.println(c.toString());
+			printlnSlowly("¿Seguro que quieres eliminarlo?", 25);
+			printlnSlowly("\n- 1. Eliminarlo", 10);
+			printlnSlowly("- 2. No eliminarlo\n", 10);
+			printSlowly("- Seleccione una opción: ", 25);
+			int opcion = validarOpcion(1, 2);
+			if (opcion == 1) {
+				int resultado = gestor.deleteById(id);
+				if (resultado == 1) {
+					printlnSlowly("Coche con ID " + id + " eliminado correctamente.", 25);
+				} else {
+					printlnSlowly("Ha ocurrido un error. Inténtelo de nuevo más tarde.", 25);
+				}
+			}
+		}
 
 	}
 
 	private void altaCoche() {
+		System.out.println("\n===========================");
+		printlnSlowly("    Dar de alta un coche   ", 5);
+		System.out.println("===========================\n");
+		Coche c = pedirDatosCoche();
+		int resultado = gestor.insert(c);
+		if (resultado == 1) {
+			printlnSlowly("\nCoche insertado correctamente.", 25);
+		} else {
+			printlnSlowly("Ha ocurrido un error. Inténtelo de nuevo más tarde.", 25);
+		}
+	}
 
-	    System.out.println("Dar de alta un coche");
-	    System.out.println("- Marca: ");
-	    String marca = scStr.nextLine();
-	    System.out.println("- Modelo: ");
-	    String modelo = scStr.nextLine();
-	    System.out.println("- Kilómetros: ");
-	    int kilometros = scInt.nextInt();
-	    System.out.println("- Seleccione un motor: ");
-	    TipoMotor motor = seleccionMotor();
-	    
-		Coche c = new Coche(marca, modelo, motor, kilometros);
-		
-		boolean[] resValidacion = gestor.validarDatos(c);
-		
+	private Coche pedirDatosCoche() {
 
-			if (resValidacion[0]) {
-				System.out.print("Selecccione una marca correcta: ");
-				c.setMarca(scStr.nextLine());
-			}
-			if (resValidacion[1]) {
-				System.out.print("Selecccione una marca correcta: ");
-				c.setMarca(scStr.nextLine());
-			}
-			if (resValidacion[2]) {
-				System.out.print("Selecccione una marca correcta: ");
-				c.setMarca(scStr.nextLine());
-			}
-			if (resValidacion[3]) {
-				System.out.print("Selecccione una marca correcta: ");
-				c.setMarca(scStr.nextLine());
-			}
+		printSlowly("- Marca: ", 25);
+		String marca = validarStringNoVacio("Marca");
+		printSlowly("- Modelo: ", 25);
+		String modelo = validarStringNoVacio("Modelo");
+		printSlowly("- Kilómetros: ", 25);
+		int kilometros = validarIntNoVacio("Kilometros");
+		printSlowly("- Seleccione un motor: ", 25);
+		TipoMotor motor = seleccionMotor();
 
+		return new Coche(marca, modelo, motor, kilometros);
 
 	}
 
 	private TipoMotor seleccionMotor() {
-		System.out.println("1. Diésel");
-	    System.out.println("2. Gasolina");
-	    System.out.println("3. Eléctrico");
-	    System.out.println("4. Híbrido");
-	    System.out.println("5. GLP");
-	    System.out.print("Opción: ");
-	    int opcionMotor = scInt.nextInt();
-	    TipoMotor motor = null;
-	    
-	    switch (opcionMotor) {
+		printlnSlowly("\n\t1. Diésel", 25);
+		printlnSlowly("\t2. Gasolina", 25);
+		printlnSlowly("\t3. Eléctrico", 25);
+		printlnSlowly("\t4. Híbrido", 25);
+		printlnSlowly("\t5. GLP\n", 25);
+		printSlowly("- Opción: ", 25);
+		int opcionMotor = scInt.nextInt();
+		TipoMotor motor = null;
+
+		switch (opcionMotor) {
 		case 1:
 			motor = TipoMotor.DIESEL;
 			break;
@@ -202,8 +289,84 @@ public class Interfaz {
 			motor = TipoMotor.GLP;
 			break;
 		}
-	    
-	    return motor;
+
+		return motor;
+	}
+
+	private int validarIntNoVacio(String atributo) {
+		int i = scInt.nextInt();
+
+		while (i == 0) {
+			printlnSlowly("Campo vacío no válido.", 25);
+			printlnSlowly("- Introduce un valor para " + atributo, 25);
+			i = scInt.nextInt();
+		}
+		return i;
+	}
+
+	private String validarStringNoVacio(String atributo) {
+
+		String s = scStr.nextLine();
+
+		while (s.isBlank()) {
+			printlnSlowly("Campo vacío no válido.", 25);
+			printlnSlowly("- Introduce un valor para " + atributo, 25);
+			s = scStr.nextLine();
+		}
+		return s;
+	}
+
+	private int validarOpcion(int i, int j) {
+		int opcion = scInt.nextInt();
+		System.out.println("");
+		while (opcion < i || opcion > j) {
+			printlnSlowly("  [ERROR] Introduce una opción correcta", 25);
+			System.out.println();
+			printSlowly("- Introduce un número entre " + i + " y " + j + ": ", 25);
+			opcion = scInt.nextInt();
+		}
+		return opcion;
+	}
+	
+	public static void print3Points(int time, int time2) {
+		for (int i = 0; i < 3; i++) {
+			try {
+				Thread.sleep(time);
+				System.out.print(".");
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}	
+		}
+		try {
+			Thread.sleep(time2);
+			System.out.print(" ");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void printSlowly(String s, int time) {
+		for (int i = 0; i < s.length(); i++) {
+			try {
+				Thread.sleep(time);
+				System.out.print(s.charAt(i));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void printlnSlowly(String s, int time) {
+		for (int i = 0; i < s.length(); i++) {
+			try {
+				Thread.sleep(time);
+				System.out.print(s.charAt(i));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("");
 	}
 
 }

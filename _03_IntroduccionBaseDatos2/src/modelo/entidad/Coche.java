@@ -1,5 +1,6 @@
 package modelo.entidad;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Coche {
@@ -16,7 +17,7 @@ public class Coche {
 	@Override
 	public String toString() {
 		return "Información del coche " + id + ":\n" + "-----------------------\n" + "ID: " + id + "\n" + "Marca: "
-				+ marca + "\n" + "Modelo: " + modelo + "\n" + "Motor: " + motor + "\n" + "Kilómetros: " + kilometros
+				+ capitalize(marca) + "\n" + "Modelo: " + capitalize(modelo) + "\n" + "Motor: " + capitalize(motor.toString()) + "\n" + "Kilómetros: " + kilometros
 				+ " km\n";
 	}
 
@@ -75,5 +76,33 @@ public class Coche {
 	public void setKilometros(int kilometros) {
 		this.kilometros = kilometros;
 	}
-	
+
+	private String capitalize(String s) {
+		String strCapitalized = "";
+
+		/* MERCEDES BENZ */
+		String strRaw = s.toLowerCase(); /* mercedes benz */
+
+		String strAuxiliar = "";
+		String strAuxiliar2 = "";
+
+		String[] listaPalabrasRaw = strRaw.split(" "); /* [mercedes][benz] */
+
+		for (String string : listaPalabrasRaw) {
+			/* 1º mercedes 2º benz */
+			char inicial = string.charAt(0); /* m */
+			strAuxiliar += inicial;
+			strAuxiliar2 = strAuxiliar.toUpperCase(); /* M */
+			for (int i = 1; i < string.length(); i++) {
+				strAuxiliar2 += string.charAt(i);
+			} /* M+e+r+c+e+d+e+s */
+
+			strCapitalized += (strAuxiliar2 + " ");
+			strAuxiliar = "";
+			strAuxiliar2 = "";
+		}
+
+		return strCapitalized.trim();
+	}
+
 }
