@@ -10,8 +10,9 @@ import java.util.List;
 
 import modelo.entidad.Coche;
 import modelo.entidad.TipoMotor;
+import modelo.persistencia.interfaz.InterfazDao;
 
-public class Dao {
+public class Dao implements InterfazDao {
 
 	/*
 	 * 
