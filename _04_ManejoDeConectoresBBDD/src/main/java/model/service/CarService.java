@@ -17,7 +17,7 @@ public class CarService {
 	}
 
 	public static CarService getInstance() {
-		return (gestor == null) ? new CarService() : gestor;
+		return (gestor == null) ? gestor = new CarService() : gestor;
 	}
 	// End Singleton
 

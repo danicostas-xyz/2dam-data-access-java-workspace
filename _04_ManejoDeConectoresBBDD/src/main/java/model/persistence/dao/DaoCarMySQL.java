@@ -35,7 +35,7 @@ public class DaoCarMySQL implements DaoCar {
 	}
 
 	public static DaoCarMySQL getInstance() {
-		return (dao == null) ? new DaoCarMySQL() : dao;
+		return (dao == null) ? dao = new DaoCarMySQL() : dao;
 	}
 	// End Singleton
 

@@ -7,6 +7,15 @@ import model.persistence.interfaces.DaoPassenger;
 
 public class DaoPassengerMySQL implements DaoPassenger {
 
+	
+	public static DaoPassengerMySQL dao;
+	private DaoPassengerMySQL() {	
+	}
+	public static DaoPassengerMySQL getInstance() {
+		return (dao == null) ? dao = new DaoPassengerMySQL() : dao;
+	}
+	
+
 	@Override
 	public Integer createPassenger(Passenger passenger) {
 		// TODO Auto-generated method stub

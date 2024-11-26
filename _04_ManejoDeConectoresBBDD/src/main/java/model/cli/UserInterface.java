@@ -24,7 +24,7 @@ public class UserInterface {
 	}
 
 	public static UserInterface getInstance() {
-		return (interfaz == null) ? new UserInterface() : interfaz;
+		return (interfaz == null) ? interfaz = new UserInterface() : interfaz;
 	}
 
 	public void runApp() {
