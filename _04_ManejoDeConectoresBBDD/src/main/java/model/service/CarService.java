@@ -1,23 +1,23 @@
-package modelo.negocio;
+package model.service;
 
 import java.util.List;
 
-import modelo.entidad.Coche;
-import modelo.persistencia.DaoCocheMySQL;
-import modelo.persistencia.interfaz.DaoCoche;
+import model.entity.Car;
+import model.persistence.dao.DaoCarMySQL;
+import model.persistence.interfaces.DaoCar;
 
-public class GestorCoche {
+public class CarService {
 
 	// Begin Singleton
-	public static GestorCoche gestor;
-	private DaoCoche dao;
+	public static CarService gestor;
+	private DaoCar dao;
 
-	private GestorCoche() {
-		dao = DaoCocheMySQL.getInstance();
+	private CarService() {
+		dao = DaoCarMySQL.getInstance();
 	}
 
-	public static GestorCoche getInstance() {
-		return (gestor == null) ? new GestorCoche() : gestor;
+	public static CarService getInstance() {
+		return (gestor == null) ? new CarService() : gestor;
 	}
 	// End Singleton
 
@@ -36,7 +36,7 @@ public class GestorCoche {
 	 *         <li>Posición 3: Kilometros</li>
 	 *         </ul>
 	 */
-	public boolean[] validarDatos(Coche c) {
+	public boolean[] validarDatos(Car c) {
 
 		boolean[] resValidacion = new boolean[4];
 
@@ -67,7 +67,7 @@ public class GestorCoche {
 	 * @return 1 si la inserción es exitosa, 0 si no se ha insertado nada, o null si
 	 *         ocurre una SQLException
 	 */
-	public Integer insert(Coche c) {
+	public Integer insert(Car c) {
 		return dao.insert(c);
 	}
 
@@ -91,7 +91,7 @@ public class GestorCoche {
 	 * @return 1 si la actualización es exitosa, 0 si no se ha modificado nada, o
 	 *         null si ocurre una SQLException
 	 */
-	public Integer updateById(Coche c) {
+	public Integer updateById(Car c) {
 		return dao.updateById(c);
 	}
 
@@ -102,7 +102,7 @@ public class GestorCoche {
 	 * @return el objeto Coche si existe, o null si no se encuentra o si ocurre una
 	 *         SQLException
 	 */
-	public Coche selectById(int id) {
+	public Car selectById(int id) {
 		return dao.selectById(id);
 	}
 
@@ -114,7 +114,7 @@ public class GestorCoche {
 	 * @return una lista de coches de la marca especificada, o una lista vacía si no
 	 *         se encuentran coincidencias
 	 */
-	public List<Coche> selectByMarca(String marca) {
+	public List<Car> selectByMarca(String marca) {
 		return dao.selectByMarca(marca);
 	}
 
@@ -123,7 +123,7 @@ public class GestorCoche {
 	 * 
 	 * @return una lista con todos los coches de la base de datos
 	 */
-	public List<Coche> selectAll() {
+	public List<Car> selectAll() {
 		return dao.selectAll();
 	}
 

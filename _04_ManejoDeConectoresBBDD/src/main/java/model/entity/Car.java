@@ -1,25 +1,25 @@
-package modelo.entidad;
+package model.entity;
 
 import java.util.List;
 import java.util.Objects;
 
-public class Coche {
+public class Car {
 	private int id;
 	private String marca;
 	private String modelo;
-	private TipoMotor motor;
+	private MotorType motor;
 	private int kilometros;
-	private List<Pasajero> listaPasajeros;
+	private List<Passenger> listaPasajeros;
 	
-	public List<Pasajero> getListaPasajeros() {
+	public List<Passenger> getListaPasajeros() {
 		return listaPasajeros;
 	}
 
-	public void setListaPasajeros(List<Pasajero> listaPasajeros) {
+	public void setListaPasajeros(List<Passenger> listaPasajeros) {
 		this.listaPasajeros = listaPasajeros;
 	}
 
-	public Coche() {
+	public Car() {
 		super();
 	}
 
@@ -43,11 +43,11 @@ public class Coche {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Coche other = (Coche) obj;
+		Car other = (Car) obj;
 		return id == other.id;
 	}
 
-	public Coche(String marca, String modelo, TipoMotor motor, int kilometros) {
+	public Car(String marca, String modelo, MotorType motor, int kilometros) {
 		super();
 		this.marca = marca;
 		this.modelo = modelo;
@@ -73,10 +73,10 @@ public class Coche {
 	public void setModelo(String modelo) {
 		this.modelo = modelo;
 	}
-	public TipoMotor getMotor() {
+	public MotorType getMotor() {
 		return motor;
 	}
-	public void setMotor(TipoMotor motor) {
+	public void setMotor(MotorType motor) {
 		this.motor = motor;
 	}
 	public int getKilometros() {

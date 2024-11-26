@@ -1,4 +1,4 @@
-package modelo.persistencia;
+package model.persistence.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import config.AppConfig;
-import modelo.entidad.Coche;
-import modelo.entidad.TipoMotor;
-import modelo.persistencia.interfaz.DaoCoche;
+import model.entity.Car;
+import model.entity.MotorType;
+import model.persistence.interfaces.DaoCar;
 
-public class DaoCocheMySQL implements DaoCoche {
+public class DaoCarMySQL implements DaoCar {
 
 	/*
 	 * 
@@ -29,13 +29,13 @@ public class DaoCocheMySQL implements DaoCoche {
 	private String pass = AppConfig.getInstance().getProperty("pass");
 
 	// Begin Singleton
-	public static DaoCocheMySQL dao;
+	public static DaoCarMySQL dao;
 
-	private DaoCocheMySQL() {
+	private DaoCarMySQL() {
 	}
 
-	public static DaoCocheMySQL getInstance() {
-		return (dao == null) ? new DaoCocheMySQL() : dao;
+	public static DaoCarMySQL getInstance() {
+		return (dao == null) ? new DaoCarMySQL() : dao;
 	}
 	// End Singleton
 
@@ -46,7 +46,7 @@ public class DaoCocheMySQL implements DaoCoche {
 	 * @return 1 si la inserción es exitosa, 0 si no se ha insertado nada, o null si
 	 *         ocurre una SQLException
 	 */
-	public Integer insert(Coche c) {
+	public Integer insert(Car c) {
 
 		Integer resultado = 0;
 
@@ -111,7 +111,7 @@ public class DaoCocheMySQL implements DaoCoche {
 	 * @return 1 si la actualización es exitosa, 0 si no se ha modificado nada, o
 	 *         null si ocurre una SQLException
 	 */
-	public Integer updateById(Coche c) {
+	public Integer updateById(Car c) {
 
 		Integer resultado = 0;
 
@@ -146,9 +146,9 @@ public class DaoCocheMySQL implements DaoCoche {
 	 * @return el objeto Coche si existe, o null si no se encuentra o si ocurre una
 	 *         SQLException
 	 */
-	public Coche selectById(int id) {
+	public Car selectById(int id) {
 
-		List<Coche> listaCoches = new ArrayList<Coche>();
+		List<Car> listaCoches = new ArrayList<Car>();
 
 		try (Connection conn = DriverManager.getConnection(url, user, pass);) {
 
@@ -180,9 +180,9 @@ public class DaoCocheMySQL implements DaoCoche {
 	 * @return una lista de coches de la marca especificada, o una lista vacía si no
 	 *         se encuentran coincidencias
 	 */
-	public List<Coche> selectByMarca(String marca) {
+	public List<Car> selectByMarca(String marca) {
 
-		List<Coche> listaCoches = new ArrayList<Coche>();
+		List<Car> listaCoches = new ArrayList<Car>();
 
 		try (Connection conn = DriverManager.getConnection(url, user, pass);) {
 
@@ -205,9 +205,9 @@ public class DaoCocheMySQL implements DaoCoche {
 	 * 
 	 * @return una lista con todos los coches de la base de datos
 	 */
-	public List<Coche> selectAll() {
+	public List<Car> selectAll() {
 
-		List<Coche> listaCoches = new ArrayList<Coche>();
+		List<Car> listaCoches = new ArrayList<Car>();
 
 		try (Connection conn = DriverManager.getConnection(url, user, pass);) {
 
@@ -233,13 +233,13 @@ public class DaoCocheMySQL implements DaoCoche {
 	 * @throws SQLException si ocurre un error en la consulta
 	 */
 
-	private List<Coche> selectQuery(PreparedStatement ps) throws SQLException {
+	private List<Car> selectQuery(PreparedStatement ps) throws SQLException {
 
 		ResultSet rs = ps.executeQuery();
-		Coche c = null;
-		List<Coche> listaCoches = new ArrayList<Coche>();
+		Car c = null;
+		List<Car> listaCoches = new ArrayList<Car>();
 		while (rs.next()) {
-			c = new Coche();
+			c = new Car();
 			c.setId(rs.getInt(1));
 			c.setMarca(rs.getString(2));
 			c.setModelo(rs.getString(3));
@@ -247,19 +247,19 @@ public class DaoCocheMySQL implements DaoCoche {
 
 			switch (motor) {
 			case "GASOLINA":
-				c.setMotor(TipoMotor.GASOLINA);
+				c.setMotor(MotorType.GASOLINA);
 				break;
 			case "DIESEL":
-				c.setMotor(TipoMotor.DIESEL);
+				c.setMotor(MotorType.DIESEL);
 				break;
 			case "ELECTRICO":
-				c.setMotor(TipoMotor.ELECTRICO);
+				c.setMotor(MotorType.ELECTRICO);
 				break;
 			case "HIBRIDO":
-				c.setMotor(TipoMotor.HIBRIDO);
+				c.setMotor(MotorType.HIBRIDO);
 				break;
 			case "GLP":
-				c.setMotor(TipoMotor.GLP);
+				c.setMotor(MotorType.GLP);
 				break;
 			}
 

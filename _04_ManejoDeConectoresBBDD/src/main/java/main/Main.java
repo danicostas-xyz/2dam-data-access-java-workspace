@@ -1,9 +1,9 @@
 package main;
 
-import modelo.interfaz.Interfaz;
+import model.cli.UserInterface;
 
 public class Main {
 	public static void main(String[] args) {
-		Interfaz.getInstance().runApp();
+		UserInterface.getInstance().runApp();
 	}
 }

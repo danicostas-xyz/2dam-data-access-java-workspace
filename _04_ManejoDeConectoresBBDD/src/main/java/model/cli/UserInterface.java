@@ -1,28 +1,30 @@
-package modelo.interfaz;
+package model.cli;
 
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import modelo.entidad.Coche;
-import modelo.entidad.TipoMotor;
-import modelo.negocio.GestorCoche;
+import model.entity.Car;
+import model.entity.MotorType;
+import model.service.CarService;
+import model.service.PassengerService;
 
-public class Interfaz {
+public class UserInterface {
 
-	public static Interfaz interfaz;
+	public static UserInterface interfaz;
 	private Scanner scInt;
 	private Scanner scStr;
-	private GestorCoche gestor;
+	private CarService carService;
+	private PassengerService passengerService;
 
-	private Interfaz() {
+	private UserInterface() {
 		scInt = new Scanner(System.in);
 		scStr = new Scanner(System.in);
-		gestor = GestorCoche.getInstance();
+		carService = CarService.getInstance();
+		passengerService = PassengerService.getInstance();
 	}
 
-	public static Interfaz getInstance() {
-		return (interfaz == null) ? new Interfaz() : interfaz;
+	public static UserInterface getInstance() {
+		return (interfaz == null) ? new UserInterface() : interfaz;
 	}
 
 	public void runApp() {
@@ -90,9 +92,7 @@ public class Interfaz {
 				break;
 			case 7:
 				gestionPasajeros();
-				printMainMenu();
-				opcion = validarOpcion(0, 7);
-				break;
+				return;
 			default:
 				break;
 			}
@@ -106,6 +106,11 @@ public class Interfaz {
 	}
 	
 	private void gestionPasajeros() {
+		
+		System.out.println("\n================================");
+		System.out.println("       MENÚ DE PASAJEROS     ");
+		System.out.println("================================");
+		
 		printPassengersMenu();
 		int opcion = validarOpcion(0, 7);
 
@@ -113,44 +118,78 @@ public class Interfaz {
 
 			switch (opcion) {
 			case 1:
-				altaCoche();
-				printMainMenu();
+				createPassenger();
+				printPassengersMenu();
 				opcion = validarOpcion(0, 7);
 				break;
 			case 2:
-				bajaCochePorId();
-				printMainMenu();
+				deletePassengerById();
+				printPassengersMenu();
 				opcion = validarOpcion(0, 7);
 				break;
 			case 3:
-				modificarCochePorID();
-				printMainMenu();
+				getPassengerById();
+				printPassengersMenu();
 				opcion = validarOpcion(0, 7);
 				break;
 			case 4:
-				buscarCochePorId();
-				printMainMenu();
+				listAllPassengers();
+				printPassengersMenu();
 				opcion = validarOpcion(0, 7);
 				break;
 			case 5:
-				buscarCochePorMarca();
-				printMainMenu();
+				addPassengerToCar();
+				printPassengersMenu();
 				opcion = validarOpcion(0, 7);
 				break;
 			case 6:
-				listarTodosLosCoches();
-				printMainMenu();
+				deletePassengerFromCar();
+				printPassengersMenu();
 				opcion = validarOpcion(0, 7);
 				break;
 			case 7:
-				gestionPasajeros();
-				printMainMenu();
+				listPassengersFromCar();
+				printPassengersMenu();
 				opcion = validarOpcion(0, 7);
 				break;
-			default:
-				break;
-			}
-		}
+			} // end switch-case;
+		} // end while();
+		runApp();
+	}
+
+	private void listPassengersFromCar() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void deletePassengerFromCar() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void addPassengerToCar() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void listAllPassengers() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void getPassengerById() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void deletePassengerById() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void createPassenger() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void printMainMenu() {
@@ -188,14 +227,14 @@ public class Interfaz {
 		printlnSlowly("  Listar todos los coches  ", 5);
 		System.out.println("===========================\n");
 
-		List<Coche> listaCoches = gestor.selectAll();
+		List<Car> listaCoches = carService.selectAll();
 		if (listaCoches.size() == 0) {
 			System.out.println("No hay ningún coche en la Base de Datos");
 		} else {
 			System.out.print("Pulsa enter para listar todos los coches ");
 			scStr.nextLine();
 			System.out.println("");
-			for (Coche coche : listaCoches) {
+			for (Car coche : listaCoches) {
 				System.out.println(coche);
 			}
 		}
@@ -209,7 +248,7 @@ public class Interfaz {
 
 		System.out.println("Seleccione el ID a buscar: ");
 		int id = validarIntNoVacio("ID");
-		Coche c = gestor.selectById(id);
+		Car c = carService.selectById(id);
 		if (c == null) {
 			System.out.println("No se ha encontrado ningún coche con el ID especificado.");
 		} else {
@@ -226,12 +265,12 @@ public class Interfaz {
 
 		printSlowly("Seleccione la marca a buscar: ", 25);
 		String marca = validarStringNoVacio("Marca");
-		List<Coche> listaCoches = gestor.selectByMarca(marca);
+		List<Car> listaCoches = carService.selectByMarca(marca);
 		if (listaCoches.size() == 0) {
 			printlnSlowly("No se ha encontrado ningún coche con la marca especificada.", 25);
 		} else {
 			printlnSlowly("Coches con la marca " + marca + ": ", 25);
-			for (Coche coche : listaCoches) {
+			for (Car coche : listaCoches) {
 				System.out.println(coche);
 			}
 		}
@@ -245,7 +284,7 @@ public class Interfaz {
 
 		printlnSlowly("Seleccione el ID a modificar: ", 25);
 		int id = validarIntNoVacio("ID");
-		Coche c = gestor.selectById(id);
+		Car c = carService.selectById(id);
 
 		if (c == null) {
 			printlnSlowly("No se ha encontrado ningún coche con el ID especificado.", 25);
@@ -261,7 +300,7 @@ public class Interfaz {
 
 				c = pedirDatosCoche();
 				c.setId(id);
-				int resultado = gestor.updateById(c);
+				int resultado = carService.updateById(c);
 				
 				if (resultado == 1) {
 					printlnSlowly("Coche con id " + id + " modificado correctamente.", 25);
@@ -280,7 +319,7 @@ public class Interfaz {
 
 		printSlowly("Seleccione el ID a borrar: ", 25);
 		int id = validarIntNoVacio("ID");
-		Coche c = gestor.selectById(id);
+		Car c = carService.selectById(id);
 
 		if (c == null) {
 			printSlowly("No se ha encontrado ningún coche con el ID especificado.", 25);
@@ -293,7 +332,7 @@ public class Interfaz {
 			printSlowly("- Seleccione una opción: ", 25);
 			int opcion = validarOpcion(1, 2);
 			if (opcion == 1) {
-				int resultado = gestor.deleteById(id);
+				int resultado = carService.deleteById(id);
 				if (resultado == 1) {
 					printlnSlowly("Coche con ID " + id + " eliminado correctamente.", 25);
 				} else {
@@ -308,8 +347,8 @@ public class Interfaz {
 		System.out.println("\n===========================");
 		printlnSlowly("    Dar de alta un coche   ", 5);
 		System.out.println("===========================\n");
-		Coche c = pedirDatosCoche();
-		int resultado = gestor.insert(c);
+		Car c = pedirDatosCoche();
+		int resultado = carService.insert(c);
 		if (resultado == 1) {
 			printlnSlowly("\nCoche insertado correctamente.", 25);
 		} else {
@@ -318,7 +357,7 @@ public class Interfaz {
 	}
 
 
-	private Coche pedirDatosCoche() {
+	private Car pedirDatosCoche() {
 
 		printSlowly("- Marca: ", 25);
 		String marca = validarStringNoVacio("Marca");
@@ -327,13 +366,13 @@ public class Interfaz {
 		printSlowly("- Kilómetros: ", 25);
 		int kilometros = validarIntNoVacio("Kilometros");
 		printSlowly("- Seleccione un motor: ", 25);
-		TipoMotor motor = seleccionMotor();
+		MotorType motor = seleccionMotor();
 
-		return new Coche(marca, modelo, motor, kilometros);
+		return new Car(marca, modelo, motor, kilometros);
 
 	}
 
-	private TipoMotor seleccionMotor() {
+	private MotorType seleccionMotor() {
 		printlnSlowly("\n\t1. Diésel", 25);
 		printlnSlowly("\t2. Gasolina", 25);
 		printlnSlowly("\t3. Eléctrico", 25);
@@ -341,23 +380,23 @@ public class Interfaz {
 		printlnSlowly("\t5. GLP\n", 25);
 		printSlowly("- Opción: ", 25);
 		int opcionMotor = scInt.nextInt();
-		TipoMotor motor = null;
+		MotorType motor = null;
 
 		switch (opcionMotor) {
 		case 1:
-			motor = TipoMotor.DIESEL;
+			motor = MotorType.DIESEL;
 			break;
 		case 2:
-			motor = TipoMotor.GASOLINA;
+			motor = MotorType.GASOLINA;
 			break;
 		case 3:
-			motor = TipoMotor.ELECTRICO;
+			motor = MotorType.ELECTRICO;
 			break;
 		case 4:
-			motor = TipoMotor.HIBRIDO;
+			motor = MotorType.HIBRIDO;
 			break;
 		case 5:
-			motor = TipoMotor.GLP;
+			motor = MotorType.GLP;
 			break;
 		}
 

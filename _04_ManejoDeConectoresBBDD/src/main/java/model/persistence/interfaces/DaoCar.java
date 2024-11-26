@@ -1,11 +1,12 @@
-package modelo.persistencia.interfaz;
+package model.persistence.interfaces;
 import java.util.List;
-import modelo.entidad.Coche;
+
+import model.entity.Car;
 
 
-public interface DaoCoche {
+public interface DaoCar {
 	
-	public Integer insert(Coche c);
+	public Integer insert(Car c);
 
 	/**
 	 * Elimina un coche en la base de datos a partir de su ID.
@@ -23,7 +24,7 @@ public interface DaoCoche {
 	 * @return 1 si la actualización es exitosa, 0 si no se ha modificado nada, o
 	 *         null si ocurre una SQLException
 	 */
-	public Integer updateById(Coche c);
+	public Integer updateById(Car c);
 
 	/**
 	 * Recupera un coche de la base de datos a partir de su ID.
@@ -32,7 +33,7 @@ public interface DaoCoche {
 	 * @return el objeto Coche si existe, o null si no se encuentra o si ocurre una
 	 *         SQLException
 	 */
-	public Coche selectById(int id);
+	public Car selectById(int id);
 
 	/**
 	 * Recupera una lista de coches que coincidan con una marca específica.
@@ -41,14 +42,14 @@ public interface DaoCoche {
 	 * @return una lista de coches de la marca especificada, o una lista vacía si no
 	 *         se encuentran coincidencias
 	 */
-	public List<Coche> selectByMarca(String marca);
+	public List<Car> selectByMarca(String marca);
 
 	/**
 	 * Recupera todos los coches de la base de datos.
 	 * 
 	 * @return una lista con todos los coches de la base de datos
 	 */
-	public List<Coche> selectAll();
+	public List<Car> selectAll();
 
 
 }

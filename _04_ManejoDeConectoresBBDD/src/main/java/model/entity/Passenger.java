@@ -1,15 +1,15 @@
-package modelo.entidad;
+package model.entity;
 
 import java.util.Objects;
 
-public class Pasajero {
+public class Passenger {
 	private int id;
 	private String nombre;
 	private int edad;
 	private double peso;
-	private Coche coche;
+	private Car coche;
 	
-	public Pasajero(String nombre, int edad, double peso, Coche coche) {
+	public Passenger(String nombre, int edad, double peso, Car coche) {
 		super();
 		this.nombre = nombre;
 		this.edad = edad;
@@ -17,7 +17,7 @@ public class Pasajero {
 		this.coche = coche;
 	}
 
-	public Pasajero() {
+	public Passenger() {
 		super();
 	}
 	
@@ -49,11 +49,11 @@ public class Pasajero {
 		this.peso = peso;
 	}
 
-	public Coche getCoche() {
+	public Car getCoche() {
 		return coche;
 	}
 
-	public void setCoche(Coche coche) {
+	public void setCoche(Car coche) {
 		this.coche = coche;
 	}
 
@@ -81,7 +81,7 @@ public class Pasajero {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pasajero other = (Pasajero) obj;
+		Passenger other = (Passenger) obj;
 		return id == other.id;
 	}
 	

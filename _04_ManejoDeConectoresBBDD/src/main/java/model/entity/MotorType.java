@@ -1,6 +1,6 @@
-package modelo.entidad;
+package model.entity;
 
-public enum TipoMotor {
+public enum MotorType {
 	
 	DIESEL, GASOLINA, ELECTRICO, HIBRIDO, GLP;
 	
