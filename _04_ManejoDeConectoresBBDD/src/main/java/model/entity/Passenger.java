@@ -7,20 +7,34 @@ public class Passenger {
 	private String nombre;
 	private int edad;
 	private double peso;
-	private Car coche;
+	private int id_coche;
+//	private Car coche;
 	
-	public Passenger(String nombre, int edad, double peso, Car coche) {
+	public Passenger(String nombre, int edad, double peso, Car coche, int id_coche) {
 		super();
 		this.nombre = nombre;
 		this.edad = edad;
 		this.peso = peso;
-		this.coche = coche;
+		this.id_coche = id_coche;
+//		this.coche = coche;
+	}
+
+	public int getId_coche() {
+		return id_coche;
+	}
+
+	public void setId_coche(int id_coche) {
+		this.id_coche = id_coche;
 	}
 
 	public Passenger() {
 		super();
 	}
 	
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -49,13 +63,13 @@ public class Passenger {
 		this.peso = peso;
 	}
 
-	public Car getCoche() {
-		return coche;
-	}
-
-	public void setCoche(Car coche) {
-		this.coche = coche;
-	}
+//	public Car getCoche() {
+//		return coche;
+//	}
+//
+//	public void setCoche(Car coche) {
+//		this.coche = coche;
+//	}
 
 	@Override
 	public String toString() {
@@ -64,7 +78,7 @@ public class Passenger {
 	           "Nombre: " + capitalize(nombre) + "\n" +
 	           "Edad: " + edad + " años\n" +
 	           "Peso: " + peso + " kg\n" +
-	           "Coche: " + coche.getId() + "\n";
+	           "Coche: " + id_coche + "\n";
 	}
 
 

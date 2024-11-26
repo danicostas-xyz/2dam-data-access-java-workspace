@@ -156,9 +156,9 @@ public class DaoCarMySQL implements DaoCar {
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setInt(1, id);
 
-			listaCoches = selectQuery(ps);
+			listaCoches = resultSetHandler(ps);
 
-			selectQuery(ps);
+			resultSetHandler(ps);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -189,7 +189,7 @@ public class DaoCarMySQL implements DaoCar {
 			String query = "SELECT * FROM coches WHERE marca =?";
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, marca);
-			listaCoches = selectQuery(ps);
+			listaCoches = resultSetHandler(ps);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -213,7 +213,7 @@ public class DaoCarMySQL implements DaoCar {
 
 			String query = "SELECT * FROM coches";
 			PreparedStatement ps = conn.prepareStatement(query);
-			listaCoches = selectQuery(ps);
+			listaCoches = resultSetHandler(ps);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -233,7 +233,7 @@ public class DaoCarMySQL implements DaoCar {
 	 * @throws SQLException si ocurre un error en la consulta
 	 */
 
-	private List<Car> selectQuery(PreparedStatement ps) throws SQLException {
+	private List<Car> resultSetHandler(PreparedStatement ps) throws SQLException {
 
 		ResultSet rs = ps.executeQuery();
 		Car c = null;
