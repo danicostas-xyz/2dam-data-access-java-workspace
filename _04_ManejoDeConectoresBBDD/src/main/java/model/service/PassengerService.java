@@ -51,12 +51,12 @@ public class PassengerService {
 	
 	
 	public Integer deletePassengerFromCar(int passengerID) {
-		return deletePassengerFromCar(passengerID);
+		return dao.deletePassengerFromCar(passengerID);
 	}
 	
 	
 	public List<Passenger> listPassengersFromCar(int carID) {
-		return listPassengersFromCar(carID);
+		return dao.listPassengersFromCar(carID);
 	}
 
 }
