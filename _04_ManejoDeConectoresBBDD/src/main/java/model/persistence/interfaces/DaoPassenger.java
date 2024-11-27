@@ -61,7 +61,7 @@ public interface DaoPassenger {
 	 * 2 en caso de que no se haya eliminado por no haberse encontrado al Car,
 	 * null en caso de que haya ocurrido alguna excepción de I/O.
 	 */
-	Integer deletePassengerFromCar(int passengerID, int carID);
+	Integer deletePassengerFromCar(int passengerID);
 	
 	/**
 	 * Recupera los Passenger de un determinado Car.

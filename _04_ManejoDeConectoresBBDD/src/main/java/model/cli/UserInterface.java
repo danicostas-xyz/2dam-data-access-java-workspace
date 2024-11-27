@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import model.entity.Car;
 import model.entity.MotorType;
+import model.entity.Passenger;
 import model.service.CarService;
 import model.service.PassengerService;
 
@@ -28,10 +29,10 @@ public class UserInterface {
 	}
 
 	public void runApp() {
-		
+
 		printSlowly("CARGANDO", 5);
 		print3Points(5, 5);
-		
+
 		System.out.println("\n================================");
 		System.out.println("          MENÚ PRINCIPAL     ");
 		System.out.println("================================");
@@ -104,13 +105,13 @@ public class UserInterface {
 		System.out.println("=============================");
 
 	}
-	
+
 	private void gestionPasajeros() {
-		
+
 		System.out.println("\n================================");
 		System.out.println("       MENÚ DE PASAJEROS     ");
 		System.out.println("================================");
-		
+
 		printPassengersMenu();
 		int opcion = validarOpcion(0, 7);
 
@@ -157,39 +158,202 @@ public class UserInterface {
 		runApp();
 	}
 
-	private void listPassengersFromCar() {
-		// TODO Auto-generated method stub
-		
+	private Car listPassengersFromCar() {
+
+		askUserIfShowCars();
+
+		System.out.println();
+		printSlowly("Elige el ID del coche del que quieres listar sus pasajeros: ", 5);
+		int option = scInt.nextInt();
+		// TODO Validar la selección
+		Car car = carService.selectById(option);
+		List<Passenger> passengerList = passengerService.listPassengersFromCar(option);
+
+		printlnSlowly(
+				("Lista de pasajeros del coche " + car.getMarca() + car.getModelo() + " (ID " + car.getId() + ")"), 5);
+
+		for (Passenger p : passengerList) {
+			printlnSlowly(p.toString(), 5);
+		}
+
+		return car; // Lo devuelvo para poder usar el coche en otros métodos que usan este método
+
 	}
 
 	private void deletePassengerFromCar() {
-		// TODO Auto-generated method stub
-		
+
+		Car car = listPassengersFromCar();
+		System.out.println();
+
+		int option;
+		do {
+			printSlowly("Selecciona el ID del pasajero que quieres sacar del coche: ", 5);
+			int passengerIDSelected = scInt.nextInt();
+			Passenger passenger = passengerService.getPassengerById(passengerIDSelected);
+			printSlowly("Has seleccionado al pasajero " + passenger.getNombre() + "(ID " + passenger.getId() + ")", 5);
+			printlnSlowly("Estás seguro de querer eliminarlo?", 5);
+			printSlowly("Pulsa 1 para eliminarlo o 0 para elegir otra opción: ", 5);
+			option = scInt.nextInt();
+			Integer result = null;
+
+			if (option == 1) {
+				result = passengerService.deletePassengerFromCar(passengerIDSelected);
+				if (result == 0) {
+					printlnSlowly("Pasajero " + passenger.getNombre() + "(ID " + passenger.getId()
+							+ ") eliminado del coche " + car.getMarca() + car.getModelo() + " (ID " + car.getId() + ")",
+							5);
+				} else if (result == null) {
+					printlnSlowly("Ha ocurrido un error inesperado, vuelva a intentarlo más tarde", 5);
+				}
+			}
+		} while (option != 1);
+
 	}
 
 	private void addPassengerToCar() {
-		// TODO Auto-generated method stub
-		
+		askUserIfShowPassengers();
+		askUserIfShowCars();
+		Passenger passenger = null;
+		Car car = null;
+		int option;
+		Integer result = null;
+
+		do {
+			printSlowly("Seleccione el ID del coche al que quieras añadir un pasajero: ", 5);
+			int carIDSelected = scInt.nextInt();
+			car = carService.selectById(carIDSelected);
+			printSlowly("Seleccione el ID del pasajero a añadir al coche" + car.getMarca() + " " + car.getModelo()
+					+ "(ID " + car.getId() + "): ", 5);
+			int passengerIDSelected = scInt.nextInt();
+			passenger = passengerService.getPassengerById(passengerIDSelected);
+			printlnSlowly("Desea confirmar los cambios?", 5);
+			printSlowly("Pulsa 1 para confirmar o 0 para volver atrás: ", 5);
+			option = scInt.nextInt();
+
+			if (option == 1) {
+				result = passengerService.addPassengerToCar(passengerIDSelected, carIDSelected);
+				if (result == 0) {
+					printlnSlowly("Pasajero añadido correctamente", 5);
+				} else {
+					printlnSlowly("Ha ocurrido un error inesperado, inténtelo de nuevo más tarde", 5);
+				}
+			}
+
+		} while (option != 1);
+
 	}
 
 	private void listAllPassengers() {
-		// TODO Auto-generated method stub
-		
+
+		System.out.println("\n===========================");
+		printlnSlowly("Listar todos los pasajeros ", 5);
+		System.out.println("===========================\n");
+
+		List<Passenger> passengerList = passengerService.listAllPassengers();
+		if (passengerList.size() == 0) {
+			printlnSlowly("No hay ningún pasajero en la Base de Datos", 5);
+		} else {
+			printlnSlowly("Pulsa enter para listar todos los pasajeros ", 5);
+			scStr.nextLine();
+			System.out.println("");
+			for (Passenger p : passengerList) {
+				printlnSlowly(p.toString(), 5);
+			}
+		}
 	}
 
 	private void getPassengerById() {
-		// TODO Auto-generated method stub
-		
+		printSlowly("Selecciona el ID del pasajero a consultar: ", 5);
+		int passengerIDSelected = scInt.nextInt();
+		Passenger passenger = passengerService.getPassengerById(passengerIDSelected);
+		if (passenger != null) {
+			// TODO falta controlar el return de getPassengerById, porque null es si hay I/O
+			// Exception, pero debería devolver 1 si no hay ningún pasajero con dicho ID
+			printlnSlowly("Pasajero seleccionado: ", 5);
+			printSlowly(passenger.toString(), 5);
+		}
+
 	}
 
 	private void deletePassengerById() {
-		// TODO Auto-generated method stub
-		
+		askUserIfShowPassengers();
+		int option;
+		do {
+			printSlowly("Selecciona el ID del pasajero a borrar: ", 5);
+			int passengerIDSelected = scInt.nextInt();
+			Passenger passenger = passengerService.getPassengerById(passengerIDSelected);
+			if (passenger != null) {
+				// TODO falta controlar el return de getPassengerById, porque null es si hay I/O
+				// Exception, pero debería devolver 1 si no hay ningún pasajero con dicho ID
+				printlnSlowly("Pasajero seleccionado: ", 5);
+				printSlowly(passenger.toString(), 5);
+			}
+
+			printlnSlowly("Estás seguro de querer eliminarlo?", 5);
+			printSlowly("Pulsa 1 para eliminarlo o 0 para elegir otra opción: ", 5);
+			option = scInt.nextInt();
+			Integer result = null;
+
+			if (option == 1) {
+				result = passengerService.deletePassengerById(passengerIDSelected);
+				if (result == 0) {
+					printlnSlowly("Pasajero " + passenger.getNombre() + "(ID " + passenger.getId()
+							+ ") eliminado correctamente.", 5);
+				} else if (result == null) {
+					printlnSlowly("Ha ocurrido un error inesperado, vuelva a intentarlo más tarde", 5);
+				}
+			}
+		} while (option != 1);
+
 	}
 
 	private void createPassenger() {
-		// TODO Auto-generated method stub
-		
+		Passenger p = new Passenger();
+		int option;
+		Integer result = null;
+
+		do {
+			printlnSlowly("Cumplimenta los datos del pasajero a añadir: ", 5);
+			printSlowly("- Nombre: ", 5);
+			p.setNombre(scStr.nextLine());
+			printSlowly("- Edad: ", 5);
+			p.setEdad(scInt.nextInt());
+			printSlowly("- Peso: ", 5);
+			p.setPeso(scInt.nextDouble());
+
+			printlnSlowly("Quieres guardar los datos?", 5);
+			printSlowly("Pulsa 1 para guardarlo o 0 para modificar los datos: ", 5);
+			option = scInt.nextInt();
+			if (option == 1) {
+				result = passengerService.createPassenger(p);
+				if (result == 1) {
+					printlnSlowly("Pasajero creado correctametne", 5);
+				} else {
+					printlnSlowly("Ha ocurrido un error inesperado, inténtelo de nuevo más tarde.", 5);
+				}
+			}
+		} while (option != 1);
+
+	}
+
+	private void askUserIfShowPassengers() {
+		printlnSlowly("¿Quieres mostrar todos los pasajeros primero?", 5);
+		printlnSlowly("Pulsa 1 para mostrar los pasajeros o 0 para introducir el ID del pasajero", 5);
+		int option = scInt.nextInt();
+
+		if (option == 1) {
+			listAllPassengers();
+		}
+	}
+
+	private void askUserIfShowCars() {
+		printlnSlowly("¿Quieres mostrar todos los coches primero?", 5);
+		printlnSlowly("Pulsa 1 para mostrar los coches o 0 para introducir el ID del coche", 5);
+		int option = scInt.nextInt();
+
+		if (option == 1) {
+			listarTodosLosCoches();
+		}
 	}
 
 	private void printMainMenu() {
@@ -202,11 +366,11 @@ public class UserInterface {
 		printlnSlowly("- 5. Buscar coches por marca", 5);
 		printlnSlowly("- 6. Listar todos los coches", 5);
 		printlnSlowly("- 7. Gestión de Pasajeros", 5);
-		
+
 		System.out.println("================================\n");
 		printSlowly("- Seleccione una opción: ", 5);
 	}
-	
+
 	private void printPassengersMenu() {
 		System.out.println("\n================================");
 		printlnSlowly("- 0. Volver al menú principal", 5);
@@ -217,7 +381,7 @@ public class UserInterface {
 		printlnSlowly("- 5. Añadir pasajero a un coche", 5);
 		printlnSlowly("- 6. Eliminar el pasajero de un coche", 5);
 		printlnSlowly("- 7. Listar todos los pasajeros de un coche", 5);
-		
+
 		System.out.println("================================\n");
 		printSlowly("- Seleccione una opción: ", 5);
 	}
@@ -301,7 +465,7 @@ public class UserInterface {
 				c = pedirDatosCoche();
 				c.setId(id);
 				int resultado = carService.updateById(c);
-				
+
 				if (resultado == 1) {
 					printlnSlowly("Coche con id " + id + " modificado correctamente.", 25);
 				} else {
@@ -355,7 +519,6 @@ public class UserInterface {
 			printlnSlowly("Ha ocurrido un error. Inténtelo de nuevo más tarde.", 25);
 		}
 	}
-
 
 	private Car pedirDatosCoche() {
 
@@ -437,7 +600,7 @@ public class UserInterface {
 		}
 		return opcion;
 	}
-	
+
 	public static void print3Points(int time, int time2) {
 		for (int i = 0; i < 3; i++) {
 			try {
@@ -445,7 +608,7 @@ public class UserInterface {
 				System.out.print(".");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}	
+			}
 		}
 		try {
 			Thread.sleep(time2);
@@ -466,7 +629,7 @@ public class UserInterface {
 			}
 		}
 	}
-	
+
 	public static void printlnSlowly(String s, int time) {
 		for (int i = 0; i < s.length(); i++) {
 			try {

@@ -14,7 +14,7 @@ public class AppConfig {
 	}
 
 	public static AppConfig getInstance() {
-		return (appConfig == null) ? new AppConfig() : appConfig;
+		return (appConfig == null) ? appConfig = new AppConfig() : appConfig;
 	}
 
 	private void initConfig() {
