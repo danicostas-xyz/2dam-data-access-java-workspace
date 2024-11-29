@@ -201,6 +201,8 @@ public class DaoPassengerMySQL implements DaoPassenger {
 			passengerList = null;
 			e.printStackTrace();
 		}
+		
+		if (passengerList.size() == 0) passengerList.add(null);
 
 		return passengerList;
 	}
