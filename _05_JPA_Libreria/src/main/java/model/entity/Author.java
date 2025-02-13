@@ -16,17 +16,19 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "authors")
 public class Author {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String nombre;
+	private String name;
 	@Column(name = "birth_date")
 	@Temporal(value = TemporalType.DATE)
 	private Date birthdate;
@@ -35,4 +37,5 @@ public class Author {
     public void setBirthdate(String birthdateStr) throws ParseException, java.text.ParseException {
         this.birthdate = dateFormat.parse(birthdateStr);
     }
+    
 }

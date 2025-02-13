@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 import model.entity.Author;
 import model.entity.Book;
 import model.entity.Library;
@@ -33,24 +34,32 @@ public class Main {
 	 * 3. Cuando ya había definido el @JoinTable, me dio error otra vez, porque
 	 * donde estaba esta anotación, también tenía un mappedBy, pero donde esté esta
 	 * no tiene que estar el mappedBy
+	 * 
+	 * 4. Al hacer los Select, si las entidades tienen en el toString() las
+	 * referencias de sus relaciones, se produce un bucle infinito: Si tienes
+	 * relaciones bidireccionales (por ejemplo, un Book tiene un PublisherHouse y un
+	 * PublisherHouse tiene una lista de Book), al imprimir una de estas entidades,
+	 * Hibernate intentará seguir la referencia y puede entrar en un ciclo infinito.
 	 */
 
 	public static void main(String[] args) {
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPALibrary");
 		EntityManager em = emf.createEntityManager();
-		
+
 		persistEntities(em);
-		
+
 		selectAllBooksWithPublisherAndAuthor(em);
+		System.out.println();
 		selectAllAuthorsWithBooks(em);
+		System.out.println();
 		selectAllLibrariesJustWithBooks(em);
+		System.out.println();
 		selectAllBooksAndLibrary(em);
 
 	}
 
 	private static void persistEntities(EntityManager em) {
-		
 
 		EntityTransaction et = em.getTransaction();
 		et.begin();
@@ -96,7 +105,6 @@ public class Main {
 		em.persist(library2);
 
 		et.commit();
-		em.close();
 	}
 
 	private static void assignLibrary2(Book catcherInTheRye, Book nineStories, Book frannyAndZooey,
@@ -124,7 +132,7 @@ public class Main {
 		} catch (ParseException | java.text.ParseException e) {
 			e.printStackTrace();
 		}
-		salinger.setNombre("J.D. Salinger");
+		salinger.setName("J.D. Salinger");
 		salinger.setListOfBooks(List.of(catcherInTheRye, frannyAndZooey, nineStories));
 	}
 
@@ -134,7 +142,7 @@ public class Main {
 		} catch (ParseException | java.text.ParseException e) {
 			e.printStackTrace();
 		}
-		woolf.setNombre("Virginia Woolf");
+		woolf.setName("Virginia Woolf");
 		woolf.setListOfBooks(List.of(toTheLighthouse, mrsDalloway));
 	}
 
@@ -145,7 +153,7 @@ public class Main {
 		} catch (ParseException | java.text.ParseException e) {
 			e.printStackTrace();
 		}
-		orwell.setNombre("George Orwell");
+		orwell.setName("George Orwell");
 		orwell.setListOfBooks(List.of(downAndOutInParisAndLondon, animalFarm, nineteenEightyFour));
 	}
 
@@ -236,22 +244,72 @@ public class Main {
 	}
 
 	private static void selectAllBooksAndLibrary(EntityManager em) {
-		
-		
+		String jpql = "SELECT b FROM Book b";
+		TypedQuery<Book> query = em.createQuery(jpql, Book.class);
+		List<Book> listOfBooks = query.getResultList();
+
+		listOfBooks.forEach(book -> {
+			System.out.println("--------------------------------------------------");
+			System.out.print("Book: ");
+			System.out.println(book.getTitle());
+			System.out.println("Libraries available: ");
+			book.getListOfLibrariesWhereAvailable().forEach(library -> {
+				System.out.print("\t- Library " + library.getName());
+				System.out.println(" (" + library.getAddress() + ")");
+			});
+		});
 	}
 
 	private static void selectAllLibrariesJustWithBooks(EntityManager em) {
-		// TODO Auto-generated method stub
-		
+		String jpql = "SELECT l FROM Library l";
+		TypedQuery<Library> query = em.createQuery(jpql, Library.class);
+		List<Library> listOfLibraries = query.getResultList();
+
+		listOfLibraries.forEach(library -> {
+			System.out.println("--------------------------------------------------");
+			System.out.print("Library: ");
+			System.out.println(library.getName());
+			System.out.println("Books available: ");
+			System.out.println();
+			library.getListOfBooks().forEach(book -> {
+				System.out.println("\t- " + book.getTitle());
+			});
+		});
+
 	}
 
 	private static void selectAllAuthorsWithBooks(EntityManager em) {
-		// TODO Auto-generated method stub
-		
+		String jpql = "SELECT a FROM Author a";
+		TypedQuery<Author> query = em.createQuery(jpql, Author.class);
+		List<Author> listOfAuthors = query.getResultList();
+
+		listOfAuthors.forEach(author -> {
+			System.out.println("--------------------------------------------------");
+			System.out.print("Author: ");
+			System.out.println(author.getName());
+			System.out.println("Books written: ");
+			System.out.println();
+			author.getListOfBooks().forEach(book -> {
+				System.out.println("\t- " + book.getTitle());
+			});
+		});
+
 	}
 
 	private static void selectAllBooksWithPublisherAndAuthor(EntityManager em) {
-		// TODO Auto-generated method stub
-		
+		String jpql = "SELECT b FROM Book b";
+		TypedQuery<Book> query = em.createQuery(jpql, Book.class);
+		List<Book> listOfBooks = query.getResultList();
+
+		listOfBooks.forEach(book -> {
+			System.out.println("--------------------------------------------------");
+			System.out.print("Book: ");
+			System.out.println(book.getTitle());
+			System.out.print("Publisher: ");
+			System.out.println(book.getPublisher().getName());
+			System.out.print("Author: ");
+			System.out.println(book.getAuthor().getName());
+		});
+
 	}
 }

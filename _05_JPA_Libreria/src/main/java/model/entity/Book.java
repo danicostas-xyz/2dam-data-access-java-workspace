@@ -12,9 +12,11 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "books")
 public class Book {
@@ -36,4 +38,5 @@ public class Book {
 			inverseJoinColumns = @JoinColumn(name = "library_id")
 		)
 	private List<Library> listOfLibrariesWhereAvailable;
+
 }
