@@ -1,15 +1,13 @@
-package xyz.danicostas.model.entity;
+package model.entity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -18,8 +16,6 @@ import lombok.Data;
 import lombok.ToString.Exclude;
 
 @Data
-@Component
-@Scope(value = "prototype")
 @Entity
 @Table(name = "reviews")
 public class Review {
@@ -33,6 +29,7 @@ public class Review {
 	private Date dateWritten;
 	@Exclude
 	@ManyToOne
+	@JoinColumn(name = "fk_id_user", referencedColumnName = "id")
 	private User userWhoWrote;
 	@Exclude
 	@ManyToOne

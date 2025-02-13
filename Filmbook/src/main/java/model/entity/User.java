@@ -1,11 +1,9 @@
-package xyz.danicostas.model.entity;
+package model.entity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,8 +20,6 @@ import lombok.Data;
 import lombok.ToString.Exclude;
 
 @Data
-@Component
-@Scope(value = "prototype")
 @Entity
 @Table(name = "users")
 public class User {
@@ -47,14 +43,14 @@ public class User {
 		)
 	private List<Film> listOfFavoriteFilms;
 	@Exclude
-	@OneToMany(mappedBy = "id")
+	@OneToMany(mappedBy = "userWhoWrote")
 	private List<Review> listOfReviews;
 	@Exclude
 	@ManyToMany
 	@JoinTable(
 			name = "users_users",
-			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "user_id")
+			joinColumns = @JoinColumn(name = "user_id1"),
+			inverseJoinColumns = @JoinColumn(name = "user_id2")
 		)
 	private List<User> listOfFriends;
 	
